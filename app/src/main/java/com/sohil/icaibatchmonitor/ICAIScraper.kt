@@ -136,7 +136,7 @@ class ICAIScraper {
     fun getRegions(): Pair<FormFields, List<DropdownOption>> {
         val doc = fetch(BASE_URL)
         val fields = extractFormFields(doc)
-        val regions = doc.select("#ddlRegion option, select[name=ddlRegion] option")
+        val regions = doc.select("#ddl_reg option, select[name=ddl_reg] option")
             .toList().filter { it.attr("value").isNotBlank() && it.attr("value") != "0" }
             .map { DropdownOption(it.attr("value"), it.text().trim()) }
         return Pair(fields, regions)

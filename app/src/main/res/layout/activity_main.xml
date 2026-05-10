@@ -4,23 +4,24 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background">
+    android:background="?attr/colorSurfaceVariant">
 
     <!-- Top App Bar -->
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:fitsSystemWindows="true">
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="@color/colorPrimary"
+            android:background="?attr/colorPrimary"
             app:title="ICAI Batch Monitor"
-            app:titleTextColor="@android:color/white"
+            app:titleTextColor="?attr/colorOnPrimary"
             app:subtitle="Get notified when batches open"
-            app:subtitleTextColor="#CCFFFFFF" />
+            app:subtitleTextColor="?attr/colorOnPrimary" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -37,112 +38,97 @@
             android:padding="16dp">
 
             <!-- ── Add Monitor Card ─────────────────────────────────────── -->
-            <androidx.cardview.widget.CardView
+            <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardForm"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                app:cardCornerRadius="12dp"
-                app:cardElevation="4dp"
-                app:cardBackgroundColor="@color/cardBackground">
+                android:layout_marginBottom="24dp"
+                app:cardBackgroundColor="?attr/colorSurface"
+                style="?attr/materialCardViewElevatedStyle">
 
                 <LinearLayout
                     android:id="@+id/layoutForm"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="16dp">
+                    android:padding="20dp">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Add Batch to Monitor"
-                        android:textSize="16sp"
+                        android:textSize="20sp"
                         android:textStyle="bold"
-                        android:textColor="@color/colorPrimary"
-                        android:layout_marginBottom="12dp" />
+                        android:textColor="?attr/colorPrimary"
+                        android:layout_marginBottom="16dp" />
 
-                    <!-- Region -->
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Region"
-                        android:textSize="12sp"
-                        android:textColor="@color/textSecondary"
-                        android:layout_marginBottom="4dp" />
-
-                    <Spinner
-                        android:id="@+id/spinnerRegion"
+                    <!-- Region Dropdown -->
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                         android:layout_width="match_parent"
-                        android:layout_height="48dp"
-                        android:background="@drawable/spinner_background"
-                        android:layout_marginBottom="12dp"
-                        android:paddingStart="12dp"
-                        android:paddingEnd="12dp" />
-
-                    <!-- POU -->
-                    <TextView
-                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="POU (Training Centre)"
-                        android:textSize="12sp"
-                        android:textColor="@color/textSecondary"
-                        android:layout_marginBottom="4dp" />
+                        android:hint="Region"
+                        android:layout_marginBottom="16dp">
 
-                    <Spinner
-                        android:id="@+id/spinnerPou"
+                        <AutoCompleteTextView
+                            android:id="@+id/spinnerRegion"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="none" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <!-- POU Dropdown -->
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                         android:layout_width="match_parent"
-                        android:layout_height="48dp"
-                        android:background="@drawable/spinner_background"
-                        android:layout_marginBottom="12dp"
-                        android:paddingStart="12dp"
-                        android:paddingEnd="12dp" />
-
-                    <!-- Course -->
-                    <TextView
-                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Course"
-                        android:textSize="12sp"
-                        android:textColor="@color/textSecondary"
-                        android:layout_marginBottom="4dp" />
+                        android:hint="POU (Training Centre)"
+                        android:layout_marginBottom="16dp">
 
-                    <Spinner
-                        android:id="@+id/spinnerCourse"
+                        <AutoCompleteTextView
+                            android:id="@+id/spinnerPou"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="none" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <!-- Course Dropdown -->
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                         android:layout_width="match_parent"
-                        android:layout_height="48dp"
-                        android:background="@drawable/spinner_background"
-                        android:layout_marginBottom="12dp"
-                        android:paddingStart="12dp"
-                        android:paddingEnd="12dp" />
-
-                    <!-- Check Interval -->
-                    <TextView
-                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Check Interval"
-                        android:textSize="12sp"
-                        android:textColor="@color/textSecondary"
-                        android:layout_marginBottom="4dp" />
+                        android:hint="Course"
+                        android:layout_marginBottom="16dp">
 
-                    <Spinner
-                        android:id="@+id/spinnerInterval"
+                        <AutoCompleteTextView
+                            android:id="@+id/spinnerCourse"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="none" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <!-- Interval Dropdown -->
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                         android:layout_width="match_parent"
-                        android:layout_height="48dp"
-                        android:background="@drawable/spinner_background"
-                        android:layout_marginBottom="16dp"
-                        android:paddingStart="12dp"
-                        android:paddingEnd="12dp" />
+                        android:layout_height="wrap_content"
+                        android:hint="Check Interval"
+                        android:layout_marginBottom="24dp">
+
+                        <AutoCompleteTextView
+                            android:id="@+id/spinnerInterval"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="none" />
+                    </com.google.android.material.textfield.TextInputLayout>
 
                     <!-- Add Button -->
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btnAdd"
                         android:layout_width="match_parent"
-                        android:layout_height="48dp"
+                        android:layout_height="56dp"
                         android:text="Add to Monitor List"
-                        android:textColor="@android:color/white"
-                        app:backgroundTint="@color/colorPrimary"
-                        app:cornerRadius="8dp" />
+                        style="@style/Widget.Material3.Button" />
 
                     <!-- Loading indicator + status -->
                     <ProgressBar
@@ -150,7 +136,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
-                        android:layout_marginTop="8dp"
+                        android:layout_marginTop="16dp"
                         android:visibility="gone" />
 
                     <TextView
@@ -158,58 +144,54 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Loading regions..."
-                        android:textSize="13sp"
-                        android:textColor="@color/textSecondary"
-                        android:layout_marginTop="8dp"
+                        android:textSize="14sp"
+                        android:textColor="?attr/colorOnSurfaceVariant"
+                        android:layout_marginTop="16dp"
                         android:gravity="center" />
 
                 </LinearLayout>
-            </androidx.cardview.widget.CardView>
+            </com.google.android.material.card.MaterialCardView>
 
             <!-- ── Monitor Control Card ─────────────────────────────────── -->
-            <androidx.cardview.widget.CardView
+            <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                app:cardCornerRadius="12dp"
-                app:cardElevation="4dp"
-                app:cardBackgroundColor="@color/cardBackground">
+                android:layout_marginBottom="24dp"
+                app:cardBackgroundColor="?attr/colorSurface"
+                style="?attr/materialCardViewElevatedStyle">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="16dp">
+                    android:padding="20dp">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Monitoring Control"
-                        android:textSize="16sp"
+                        android:textSize="20sp"
                         android:textStyle="bold"
-                        android:textColor="@color/colorPrimary"
-                        android:layout_marginBottom="12dp" />
+                        android:textColor="?attr/colorPrimary"
+                        android:layout_marginBottom="16dp" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btnToggleMonitor"
                         android:layout_width="match_parent"
-                        android:layout_height="48dp"
+                        android:layout_height="56dp"
                         android:text="▶ Start Monitoring"
-                        android:textColor="@android:color/white"
-                        app:backgroundTint="@color/colorSuccess"
-                        app:cornerRadius="8dp"
-                        android:layout_marginBottom="8dp" />
+                        style="@style/Widget.Material3.Button"
+                        android:layout_marginBottom="12dp" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btnRefreshNow"
                         android:layout_width="match_parent"
-                        android:layout_height="48dp"
+                        android:layout_height="56dp"
                         android:text="🔄 Check Now (Manual)"
-                        app:backgroundTint="@color/colorSecondary"
-                        app:cornerRadius="8dp" />
+                        style="@style/Widget.Material3.Button.TonalButton" />
 
                 </LinearLayout>
-            </androidx.cardview.widget.CardView>
+            </com.google.android.material.card.MaterialCardView>
 
             <!-- ── Monitored Configs List ───────────────────────────────── -->
             <TextView
@@ -217,10 +199,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Monitored Batches (0)"
-                android:textSize="16sp"
+                android:textSize="18sp"
                 android:textStyle="bold"
-                android:textColor="@color/textPrimary"
-                android:layout_marginBottom="8dp" />
+                android:textColor="?attr/colorOnBackground"
+                android:layout_marginBottom="12dp" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerView"

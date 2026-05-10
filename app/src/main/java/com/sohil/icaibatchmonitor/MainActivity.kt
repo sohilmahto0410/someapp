@@ -22,10 +22,10 @@ import kotlinx.coroutines.withContext
 class MainActivity : AppCompatActivity() {
 
     // ─── Views ──────────────────────────────────────────────────────────────────
-    private lateinit var spinnerRegion: Spinner
-    private lateinit var spinnerPou: Spinner
-    private lateinit var spinnerCourse: Spinner
-    private lateinit var spinnerInterval: Spinner
+    private lateinit var spinnerRegion: AutoCompleteTextView
+    private lateinit var spinnerPou: AutoCompleteTextView
+    private lateinit var spinnerCourse: AutoCompleteTextView
+    private lateinit var spinnerInterval: AutoCompleteTextView
     private lateinit var btnAdd: MaterialButton
     private lateinit var btnToggleMonitor: MaterialButton
     private lateinit var btnRefreshNow: MaterialButton
@@ -155,21 +155,14 @@ class MainActivity : AppCompatActivity() {
                     return@launch
                 }
 
-                val labels = listOf("Select Region") + regions.map { it.label }
-                val regionAdapter = ArrayAdapter(this@MainActivity, android.R.layout.simple_spinner_item, labels)
-                regionAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-                spinnerRegion.adapter = regionAdapter
+                val labels = regions.map { it.label }
+                val regionAdapter = ArrayAdapter(this@MainActivity, android.R.layout.simple_dropdown_item_1line, labels)
+                spinnerRegion.setAdapter(regionAdapter)
 
-                spinnerRegion.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                    override fun onItemSelected(parent: AdapterView<*>, view: View?, pos: Int, id: Long) {
-                        if (pos == 0) {
-                            clearSpinner(spinnerPou, "Select POU")
-                            clearSpinner(spinnerCourse, "Select Course")
-                            return
-                        }
-                        loadPOUs(regions[pos - 1])
-                    }
-                    override fun onNothingSelected(parent: AdapterView<*>) {}
+                spinnerRegion.setOnItemClickListener { _, _, pos, _ ->
+                    clearSpinner(spinnerPou, "")
+                    clearSpinner(spinnerCourse, "")
+                    loadPOUs(regions[pos])
                 }
 
                 setStatus("✅ Loaded ${regions.size} regions. Select one to continue.")
@@ -264,16 +257,14 @@ class MainActivity : AppCompatActivity() {
             } catch (e: Exception) {
                 // Even if course fetch fails, show static list (courses rarely change)
                 val staticCourses = listOf(
-                    "Select Course",
                     "ICITSS - Orientation Course",
                     "ICITSS - Information Technology",
                     "AICITSS - Advanced Information Technology",
                     "Advanced (ICITSS) MCS Course",
                     "Advanced (ICITSS) MCS Course - Weekend"
                 )
-                val courseAdapter = ArrayAdapter(this@MainActivity, android.R.layout.simple_spinner_item, staticCourses)
-                courseAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-                spinnerCourse.adapter = courseAdapter
+                val courseAdapter = ArrayAdapter(this@MainActivity, android.R.layout.simple_dropdown_item_1line, staticCourses)
+                spinnerCourse.setAdapter(courseAdapter)
                 setStatus("⚠️ Using default course list. Select course and proceed.")
                 setLoading(false)
             }
@@ -284,40 +275,31 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupAddButton() {
         btnAdd.setOnClickListener {
-            val regionPos = spinnerRegion.selectedItemPosition
-            val pouPos = spinnerPou.selectedItemPosition
-            val coursePos = spinnerCourse.selectedItemPosition
-            val intervalPos = spinnerInterval.selectedItemPosition
+            val regionLabel = spinnerRegion.text.toString()
+            val pouLabel = spinnerPou.text.toString()
+            val courseLabel = spinnerCourse.text.toString()
+            val intervalLabel = spinnerInterval.text.toString()
 
-            if (regionPos == 0 || regionOptions.isEmpty()) {
-                showSnack("Please select a region")
+            val region = regionOptions.find { it.label == regionLabel }
+            val pou = pouOptions.find { it.label == pouLabel }
+            
+            if (region == null) {
+                showSnack("Please select a valid region")
                 return@setOnClickListener
             }
-            if (pouPos == 0 || pouOptions.isEmpty()) {
-                showSnack("Please select a POU")
+            if (pou == null) {
+                showSnack("Please select a valid POU")
                 return@setOnClickListener
             }
-            if (coursePos == 0) {
+            if (courseLabel.isBlank()) {
                 showSnack("Please select a course")
                 return@setOnClickListener
             }
 
-            val region = regionOptions[regionPos - 1]
-            val pou = pouOptions[pouPos - 1]
-            val intervalMinutes = intervalOptions[intervalPos].second
+            val intervalMinutes = intervalOptions.find { it.first == intervalLabel }?.second ?: 30
 
             // For course, either use fetched options or spinner text
-            val courseValue: String
-            val courseLabel: String
-            if (courseOptions.isNotEmpty() && coursePos <= courseOptions.size) {
-                val course = courseOptions[coursePos - 1]
-                courseValue = course.value
-                courseLabel = course.label
-            } else {
-                // Static fallback: use spinner text as both value and label
-                courseLabel = spinnerCourse.selectedItem.toString()
-                courseValue = courseLabel
-            }
+            val courseValue = courseOptions.find { it.label == courseLabel }?.value ?: courseLabel
 
             val config = MonitorConfig(
                 regionLabel = region.label,
@@ -428,5 +410,8 @@ class MainActivity : AppCompatActivity() {
                 notifPermLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
             }
         }
+    }
+}
+ }
     }
 }
