@@ -183,7 +183,7 @@ class ICAIScraper {
         val (fields3, _) = getCourses(fields2, region, pou)
 
         // Final POST: trigger the Course dropdown which loads the grid
-        val doc = post(fields3, "ddlCourse", region, pou, course)
+        val doc = post(fields3, "ddl_course", region, pou, course)
 
         return parseBatches(doc)
     }
