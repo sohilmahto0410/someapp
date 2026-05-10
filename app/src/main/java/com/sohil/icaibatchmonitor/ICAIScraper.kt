@@ -103,9 +103,9 @@ class ICAIScraper {
         .add("__VIEWSTATE", fields.viewState)
         .add("__VIEWSTATEGENERATOR", fields.viewStateGenerator)
         .add("__EVENTVALIDATION", fields.eventValidation)
-        .add("ddlRegion", region)
+        .add("ddl_reg", region)
         .add("ddlPou", pou)
-        .add("ddlCourse", course)
+        .add("ddl_course", course)
         .build()
 
     /** Fetch a URL and return the parsed Document */
@@ -147,7 +147,7 @@ class ICAIScraper {
      * Returns (updated FormFields, list of POU options)
      */
     fun getPOUs(fields: FormFields, regionValue: String): Pair<FormFields, List<DropdownOption>> {
-        val doc = post(fields, "ddlRegion", regionValue, "", "")
+        val doc = post(fields, "ddl_reg", regionValue, "", "")
         val newFields = extractFormFields(doc)
         val pous = doc.select("#ddlPou option, select[name=ddlPou] option")
             .toList().filter { it.attr("value").isNotBlank() && it.attr("value") != "0" }
@@ -162,7 +162,7 @@ class ICAIScraper {
     fun getCourses(fields: FormFields, regionValue: String, pouValue: String): Pair<FormFields, List<DropdownOption>> {
         val doc = post(fields, "ddlPou", regionValue, pouValue, "")
         val newFields = extractFormFields(doc)
-        val courses = doc.select("#ddlCourse option, select[name=ddlCourse] option")
+        val courses = doc.select("#ddl_course option, select[name=ddl_course] option")
             .toList().filter { it.attr("value").isNotBlank() && it.attr("value") != "0" }
             .map { DropdownOption(it.attr("value"), it.text().trim()) }
         return Pair(newFields, courses)
@@ -226,4 +226,6 @@ class ICAIScraper {
 
         return batches
     }
+}
+}
 }
