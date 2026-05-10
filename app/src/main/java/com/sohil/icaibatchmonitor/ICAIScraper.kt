@@ -137,7 +137,7 @@ class ICAIScraper {
         val doc = fetch(BASE_URL)
         val fields = extractFormFields(doc)
         val regions = doc.select("#ddlRegion option, select[name=ddlRegion] option")
-            .filter { it.attr("value").isNotBlank() && it.attr("value") != "0" }
+            .toList().filter { it.attr("value").isNotBlank() && it.attr("value") != "0" }
             .map { DropdownOption(it.attr("value"), it.text().trim()) }
         return Pair(fields, regions)
     }
@@ -150,7 +150,7 @@ class ICAIScraper {
         val doc = post(fields, "ddlRegion", regionValue, "", "")
         val newFields = extractFormFields(doc)
         val pous = doc.select("#ddlPou option, select[name=ddlPou] option")
-            .filter { it.attr("value").isNotBlank() && it.attr("value") != "0" }
+            .toList().filter { it.attr("value").isNotBlank() && it.attr("value") != "0" }
             .map { DropdownOption(it.attr("value"), it.text().trim()) }
         return Pair(newFields, pous)
     }
@@ -163,7 +163,7 @@ class ICAIScraper {
         val doc = post(fields, "ddlPou", regionValue, pouValue, "")
         val newFields = extractFormFields(doc)
         val courses = doc.select("#ddlCourse option, select[name=ddlCourse] option")
-            .filter { it.attr("value").isNotBlank() && it.attr("value") != "0" }
+            .toList().filter { it.attr("value").isNotBlank() && it.attr("value") != "0" }
             .map { DropdownOption(it.attr("value"), it.text().trim()) }
         return Pair(newFields, courses)
     }
