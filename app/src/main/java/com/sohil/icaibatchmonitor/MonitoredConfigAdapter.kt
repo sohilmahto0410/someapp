@@ -37,29 +37,31 @@ class MonitoredConfigAdapter(
     override fun getItemCount() = items.size
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val tvCourse: TextView = itemView.findViewById(R.id.tvCourse)
+        private val tvCourseName: TextView = itemView.findViewById(R.id.tvCourseName)
         private val tvLocation: TextView = itemView.findViewById(R.id.tvLocation)
-        private val tvLastChecked: TextView = itemView.findViewById(R.id.tvLastChecked)
-        private val tvBatchCount: TextView = itemView.findViewById(R.id.tvBatchCount)
-        private val btnDelete: ImageButton = itemView.findViewById(R.id.btnDelete)
+        private val tvInterval: TextView = itemView.findViewById(R.id.tvInterval)
+        private val btnDeleteConfig: ImageButton = itemView.findViewById(R.id.btnDeleteConfig)
 
         fun bind(config: MonitorConfig) {
-            tvCourse.text = config.courseLabel
+            tvCourseName.text = config.courseLabel
             tvLocation.text = "${config.pouLabel} · ${config.regionLabel}"
-            tvBatchCount.text = if (config.lastKnownBatchKeys.isEmpty()) {
+            
+            val status = if (config.lastKnownBatchKeys.isEmpty()) {
                 "Not checked yet"
             } else {
                 "${config.lastKnownBatchKeys.size} batches tracked"
             }
 
-            tvLastChecked.text = if (config.lastCheckedAt == 0L) {
+            val lastCheck = if (config.lastCheckedAt == 0L) {
                 "Never checked"
             } else {
                 val sdf = SimpleDateFormat("dd MMM, hh:mm a", Locale.getDefault())
                 "Last checked: ${sdf.format(Date(config.lastCheckedAt))}"
             }
+            
+            tvInterval.text = "Checking every ${config.intervalMinutes}m • $status • $lastCheck"
 
-            btnDelete.setOnClickListener { onDelete(config) }
+            btnDeleteConfig.setOnClickListener { onDelete(config) }
         }
     }
 }

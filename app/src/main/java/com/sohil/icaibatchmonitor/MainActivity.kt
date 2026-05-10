@@ -130,6 +130,10 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupIntervalSpinner() {
         val labels = intervalOptions.map { it.first }
+        val intervalAdapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, labels)
+        spinnerInterval.setAdapter(intervalAdapter)
+        spinnerInterval.setText(labels[1], false) // default: 30 min
+    }
         val intervalAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, labels)
         intervalAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinnerInterval.adapter = intervalAdapter
@@ -196,20 +200,13 @@ class MainActivity : AppCompatActivity() {
                     return@launch
                 }
 
-                val labels = listOf("Select POU") + pous.map { it.label }
-                val pouAdapter = ArrayAdapter(this@MainActivity, android.R.layout.simple_spinner_item, labels)
-                pouAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-                spinnerPou.adapter = pouAdapter
+                val labels = pous.map { it.label }
+                val pouAdapter = ArrayAdapter(this@MainActivity, android.R.layout.simple_dropdown_item_1line, labels)
+                spinnerPou.setAdapter(pouAdapter)
 
-                spinnerPou.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                    override fun onItemSelected(parent: AdapterView<*>, view: View?, pos: Int, id: Long) {
-                        if (pos == 0) {
-                            clearSpinner(spinnerCourse, "Select Course")
-                            return
-                        }
-                        loadCourses(region, pous[pos - 1])
-                    }
-                    override fun onNothingSelected(parent: AdapterView<*>) {}
+                spinnerPou.setOnItemClickListener { _, _, pos, _ ->
+                    clearSpinner(spinnerCourse, "")
+                    loadCourses(region, pous[pos])
                 }
 
                 setStatus("✅ Loaded ${pous.size} POUs. Select one.")
@@ -244,12 +241,11 @@ class MainActivity : AppCompatActivity() {
                            "Advanced (ICITSS) MCS Course",
                            "Advanced (ICITSS) MCS Course - Weekend")
                 } else {
-                    listOf("Select Course") + courses.map { it.label }
+                    courses.map { it.label }
                 }
 
-                val courseAdapter = ArrayAdapter(this@MainActivity, android.R.layout.simple_spinner_item, labels)
-                courseAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-                spinnerCourse.adapter = courseAdapter
+                val courseAdapter = ArrayAdapter(this@MainActivity, android.R.layout.simple_dropdown_item_1line, labels)
+                spinnerCourse.setAdapter(courseAdapter)
 
                 setStatus("✅ Ready. Select a course and tap Add Monitor.")
                 setLoading(false)
@@ -382,10 +378,9 @@ class MainActivity : AppCompatActivity() {
         tvConfigHeader.text = "Monitored Batches (${configs.size})"
     }
 
-    private fun clearSpinner(spinner: Spinner, placeholder: String) {
-        val placeholderAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, listOf(placeholder))
-        placeholderAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        spinner.adapter = placeholderAdapter
+    private fun clearSpinner(spinner: AutoCompleteTextView, placeholder: String) {
+        spinner.setAdapter(null)
+        spinner.setText("", false)
     }
 
     private fun setLoading(loading: Boolean, message: String = "") {
@@ -413,5 +408,3 @@ class MainActivity : AppCompatActivity() {
     }
 }
  }
-    }
-}
